@@ -1,5 +1,5 @@
 const express = require("express")
-const server = express ()
+const server = express()
 const routes = require("./routes")
 
 server.set('view engine', 'ejs')
