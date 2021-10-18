@@ -4,8 +4,9 @@
   "description": "Freelance Calculator",
   "main": "src/server.js",
   "scripts": {
-    "dev": "nodemon ."
-  },
+    "dev": "nodemon .",
+    "ejslint": "ejslint "
+    },
   "keywords": [],
   "author": "",
   "license": "MIT",
@@ -13,6 +14,7 @@
     "ejs": "^3.1.6",
     "ejs-lint": "^1.2.1",
     "express": "^4.17.1",
+    "global": "^4.4.0",
     "syntax-error": "^1.4.0"
   },
   "devDependencies": {
