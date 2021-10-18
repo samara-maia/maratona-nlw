@@ -14,12 +14,13 @@ const profile = {
     "value-hour": 75
 };
 
-  const jobs = [
+const Job = {
+  data:[
     {
       id: 1,
       name: "Pizzaria Guloso",
       "daily-hours" : 2,
-      "total-hours" : 60,
+      "total-hours" : 1,
       created_at: Date.now()
     },
     {
@@ -29,43 +30,50 @@ const profile = {
       "total-hours" : 47,
       created_at: Date.now()
     }
-  ];
-  
-   function remainingDays(job) {
-     // calculo de tempo restenate
-    const remainingDays = (job["total-hours"] / job ["daily-hours"]).toFixed()
+  ],
 
-    const createdDate = new Date(job.created_at)
-    const dueDay = createdDate.getDay() + Number(remainingDays) 
-    const dueDateInMs = createdDate.setDate(dueDay)
+  controllers: {
+    index(req, res) {
 
-    const timeDiffinMs = dueDateInMs - Date.now( )
-      //transformar milli em dias
-    const dayInMs = 1000 * 60 *  24
-    const dayDiff = Math.floor(timeDiffinMs / dayInMs)
-
-    return dayDiff
-   };
+      const updatedJobs = Job.data.map((job) => {
+        // ajustes no job
+        const remaining = Job.services.remainingDays(job)
+        const status = remaining <= 0 ? 'done' : 'progress'
     
-//req, res
-routes.get('/', (req, res) => {
+        return {
+          ...job,
+          remaining,
+          status,
+          budget: profile["value-hour"] * job["total-hours"]      
+        }
+      }) 
+      
+    
+      return res.render(views + "index", {jobs: updatedJobs})
+     },
+    },
 
-  const updatedJobs = jobs.map((job) => {
-    // ajustes no job
-    const remaining = remainingDays(job)
-    const status = remaining <= 0 ? 'done' : 'progress'
-
-    return {
-      ...job,
-      remaining,
-      status,
-      budget: profile["value-hour"] * job["total-hours"]      
+  services: {
+      remainingDays(job) {
+        // calculo de tempo restenate
+       const remainingDays = (job["total-hours"] / job ["daily-hours"]).toFixed()
+   
+       const createdDate = new Date(job.created_at)
+       const dueDay = createdDate.getDay() + Number(remainingDays) 
+       const dueDateInMs = createdDate.setDate(dueDay)
+   
+       const timeDiffinMs = dueDateInMs - Date.now( )
+         //transformar milli em dias
+       const dayInMs = 1000 * 60 *  24
+       const dayDiff = Math.floor(timeDiffinMs / dayInMs)
+   
+       return dayDiff
+      }
     }
-  }) 
-  
-
-  return res.render(views + "index", {jobs: updatedJobs})
-})
+  }
+   
+//req, res
+routes.get('/', Job.controllers.index)
 
 routes.get('/job', (req, res) => res.render(views +  "job"))
 
