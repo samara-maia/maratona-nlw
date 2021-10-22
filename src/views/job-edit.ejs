@@ -30,7 +30,11 @@
     <%- include('parts/page-header', {title: 'Editar Job'}) %> 
 
     <div class="container flex animate-up delay-2">
-        <form id="form-job">
+      
+        <form id="form-job"
+        method="post"
+        action="/job/ <%= job.id %> ">
+
           <fieldset>
             <legend>Dados do Job</legend>
             <div class="separator light"></div>
@@ -116,7 +120,7 @@
       </div>
       <form 
         method="post" 
-        action="/job/delete/{JOBID}" 
+        action="/job/delete/<%= job.id %> " 
         id="delete-job"></form>
     </div>
     <!-- end modal-wrapper -->
